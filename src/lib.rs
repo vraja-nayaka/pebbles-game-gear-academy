@@ -22,7 +22,7 @@ extern "C" fn init() {
         max_pebbles_per_turn: init_message.max_pebbles_per_turn,
         pebbles_remaining,
         difficulty: init_message.difficulty,
-        first_player: Player::User,
+        first_player,
         winner: None,
     };
 
@@ -61,13 +61,14 @@ extern "C" fn handle() {
                 );
 
                 game_state.pebbles_remaining -= counter_pebbles_taken;
-                msg::reply(PebblesEvent::CounterTurn(counter_pebbles_taken), 0)
-                    .expect("Failed to reply with CounterTurn event");
 
                 if game_state.pebbles_remaining == 0 {
                     game_state.winner = Some(Player::Program);
                     msg::reply(PebblesEvent::Won(Player::Program), 0)
                         .expect("Failed to reply with Won event");
+                } else {
+                    msg::reply(PebblesEvent::CounterTurn(counter_pebbles_taken), 0)
+                        .expect("Failed to reply with CounterTurn event");
                 }
             }
         }
