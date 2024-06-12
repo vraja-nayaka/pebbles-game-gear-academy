@@ -14,7 +14,7 @@ extern "C" fn init() {
         init_message.pebbles_count,
         init_message.max_pebbles_per_turn,
         first_player.clone(),
-        init_message.difficulty.clone(),
+        init_message.difficulty,
     );
 
     let initial_state = GameState {
@@ -87,7 +87,7 @@ extern "C" fn handle() {
                 pebbles_count,
                 max_pebbles_per_turn,
                 first_player.clone(),
-                difficulty.clone(),
+                difficulty,
             );
 
             game_state = GameState {
@@ -143,12 +143,11 @@ fn get_contract_pebbles_taken(
 
 fn get_first_player() -> Player {
     let random_number = get_random_u32();
-    let first_player = if random_number % 2 == 0 {
+    if random_number % 2 == 0 {
         Player::User
     } else {
         Player::Program
-    };
-    first_player
+    }
 }
 
 fn get_init_pebbles_remain(
